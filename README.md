@@ -1,7 +1,6 @@
-# Tauri + React + Typescript
+issue #8916 
+pr fix #8930
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+This example opens two `window` with same front-end code, but the function is related to the current window label, so they are completely independent.
 
-## Recommended IDE Setup
-
-- [VS Code](https://code.visualstudio.com/) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+The front-end uses `useEffect` to `listen` a event with the name of the `windowLabel` after the page loads, and `unlisten` to clear the side-effect. The back-end creates a `command fn` called `emit`, which sends a message to the front-end with the eventName `windowLabel`, and clicking the button on the front-end invokes the `emit` command. 

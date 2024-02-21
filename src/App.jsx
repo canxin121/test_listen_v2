@@ -1,42 +1,52 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useEffect, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
+import { getCurrent, getAll } from "@tauri-apps/api/window";
 
+const CrtWindow = getCurrent();
+let windowLabel = CrtWindow.label;
 export default function App() {
   const [handleTime, setHandleTime] = useState(0);
-  function msgHandler(msg) {
-    setHandleTime((prev) => prev + 1);
-    console.log(msg);
-  }
   useEffect(() => {
-    let unlistenPromise = listen("event", msgHandler);
-
-    return async () => {
-      const unlisten = await unlistenPromise;
-      if (unlisten) {
-        unlisten()
-          .then((rst) => {
-            console.log("call unlisten");
-          })
-          .catch((e) => {
-            alert("call unlisten error: " + e);
-          });
-      }
+    function msgHandler(msg) {
+      setHandleTime((prev) => prev + 1);
+      console.log(msg);
+    }
+    const cleanUp = () => {
+      unlisten.then((func) => {
+        func();
+      });
     };
+    const unlisten = listen(windowLabel, msgHandler);
+    return cleanUp;
   }, []);
 
+  useEffect(() => {
+    window.crtWindow = CrtWindow;
+  }, []);
   return (
-    <>
-      {/* This button invoke app.emit("event","msg") */}
+    <div>
+      <h1>{windowLabel}</h1>
+      <h1>handleTime: {handleTime}</h1>
       <button
         onClick={() => {
           setHandleTime(0);
-          invoke("emit", "msg");
+          invoke("emit", { label: windowLabel });
         }}
       >
         emit
       </button>
-      <h1>handleTime: {handleTime}</h1>
-    </>
+      <button
+        onClick={() => {
+          invoke("plugin:event|unlisten_all")
+            .then()
+            .catch((e) => {
+              console.error("Failed to clear residual listensers: " + e);
+            });
+        }}
+      >
+        clear listeners
+      </button>
+    </div>
   );
 }

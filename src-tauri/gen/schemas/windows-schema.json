@@ -258,6 +258,13 @@
           ]
         },
         {
+          "description": "event:allow-unlisten-all -> Enables the unlisten_all command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "event:allow-unlisten-all"
+          ]
+        },
+        {
           "description": "event:deny-emit -> Denies the emit command without any pre-configured scope.",
           "type": "string",
           "enum": [
@@ -283,6 +290,13 @@
           "type": "string",
           "enum": [
             "event:deny-unlisten"
+          ]
+        },
+        {
+          "description": "event:deny-unlisten-all -> Denies the unlisten_all command without any pre-configured scope.",
+          "type": "string",
+          "enum": [
+            "event:deny-unlisten-all"
           ]
         },
         {
