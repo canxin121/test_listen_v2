@@ -36,17 +36,6 @@ export default function App() {
       >
         emit
       </button>
-      <button
-        onClick={() => {
-          invoke("plugin:event|unlisten_all")
-            .then()
-            .catch((e) => {
-              console.error("Failed to clear residual listensers: " + e);
-            });
-        }}
-      >
-        clear listeners
-      </button>
     </div>
   );
 }

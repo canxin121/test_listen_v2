@@ -15,15 +15,10 @@ async fn emit<R: Runtime>(
     Ok(())
 }
 
-#[tauri::command]
-async fn empty() -> Result<String, String> {
-    Ok("".to_string())
-}
-
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 fn main() {
     tauri::Builder::default()
-        .invoke_handler(generate_handler![emit, empty])
+        .invoke_handler(generate_handler![emit])
         .setup(|app| {
             let builder = WebviewWindowBuilder::new(
                 app,
